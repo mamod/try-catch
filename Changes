@@ -1,0 +1,5 @@
+Revision history for Perl extension Try::Catch.
+
+0.01  Thu Dec 18 23:25:21 2012
+	- original version; created by h2xs 1.23 with options
+		-X -n URI::Simple
