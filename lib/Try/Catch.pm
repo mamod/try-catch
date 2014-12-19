@@ -6,73 +6,90 @@ use Data::Dumper;
 $Carp::Internal{+__PACKAGE__}++;
 use base 'Exporter';
 our @EXPORT = our @EXPORT_OK = qw(try catch finally);
-our $VERSION = 0.001;
-
-my $finally;
-my $catch;
+our $VERSION = 0.002;
 
 sub try(&;@) {
     my $wantarray =  wantarray;
-    ##copy then reset
-    #reset blocks and counter
-    my $catch_code = $catch;
-    my $finally_code = $finally;
-    $finally = undef;
-    $catch = undef;
-    my $code = shift;
+    my $try = shift;
+    my $blocks = shift;
+
+    my ($catch, $finally);
+    if ($blocks && ref $blocks eq 'HASH'){
+        $catch = $blocks->{_try_catch};
+        $finally = $blocks->{_try_finally};
+    }
+
     my @ret;
     my $prev_error = $@;
-    
     my $fail = not eval {
         $@ = $prev_error;
         if (!defined $wantarray) {
-            $code->();
+            $try->();
         } elsif (!$wantarray) {
-            $ret[0] = $code->();
+            $ret[0] = $try->();
         } else {
-            @ret = $code->();
+            @ret = $try->();
         }
-        
         return 1;
     };
     
-    my @args = $fail ? ($@) : ();
-    $@ = $prev_error;
+    my $error = $@;
+    my @args = $fail ? ($error) : ();
     
-    if ($fail) {
-        if ($catch_code) {
+    if ($fail && $catch) {
+        my $ret = not eval {
+            $@ = $prev_error;
             local $_ = $args[0];
             for ($_){
                 if (!defined $wantarray) {
-                    $catch_code->(@args);
+                    $catch->(@args);
                 } elsif (!$wantarray) {
-                    $ret[0] = $catch_code->(@args);
+                    $ret[0] = $catch->(@args);
                 } else {
-                    @ret = $catch_code->(@args);
+                    @ret = $catch->(@args);
                 }
                 last; ## seems to boost speed by 7%
             }
+            return 1;
+        };
+
+        if ($ret){
+            $finally->(@args) if $finally;
+            croak $@;
         }
     }
-    
-    $finally_code->(@args) if $finally_code;
+
+    $@ = $prev_error;
+    $finally->(@args) if $finally;
     return $wantarray ? @ret : $ret[0];
 }
 
 sub catch(&;@) {
     croak 'Useless bare catch()' unless wantarray;
-    croak 'One catch block allowed' if $catch;
-    croak 'Missing semicolon after catch block' if $_[1];
-    $catch = $_[0];
-    return;
+    my $ret = { _try_catch => shift };
+    if (@_) {
+        my $prev_block = shift;
+        if (ref $prev_block ne 'HASH' || !$prev_block->{_try_finally}){
+            croak 'Missing semicolon after catch block ';
+        }
+        croak 'One catch block allowed' if $prev_block->{_try_catch};
+        $ret->{_try_finally} = $prev_block->{_try_finally};
+    }
+    return $ret;
 }
 
 sub finally(&;@) {
     croak 'Useless bare finally()' unless wantarray;
-    croak 'One finally block allowed' if $finally;
-    croak 'Missing semicolon after finally block ' if $_[1];
-    $finally = $_[0];
-    return;
+    my $ret = { _try_finally => shift };
+    if (@_) {
+        my $prev_block = shift;
+        if (ref $prev_block ne 'HASH' || !$prev_block->{_try_catch}){
+            croak 'Missing semicolon after finally block ';
+        }
+        croak 'One finally block allowed' if $prev_block->{_try_finally};
+        $ret->{_try_catch} = $prev_block->{_try_catch};
+    }
+    return $ret;
 }
 
 1;
