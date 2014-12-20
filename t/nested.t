@@ -3,25 +3,21 @@ use warnings;
 use Test::More;
 use Try::Catch;
 
-#############################################################
-# this test pass javascript but not this module since we don't
-# throw an error if there is no catch block, I'll keep it here 
-# in order to see if it's a better approach to throw by default
-##############################################################
-# {
-#   try {
-#       try {
-#           die "inner oops";
-#       }
-#       finally {
-#           pass("finally called");
-#       };
-#   }
-#   catch {
-#       ok ($_ =~ /^inner oops/);
-#   };
-# }
+{
+    try {
+        try {
+            die "inner oops";
+        }
+        finally {
+            pass("finally called");
+        };
 
+        fail("should not be called");
+    }
+    catch {
+        ok ($_ =~ /^inner oops/);
+    };
+}
 
 {
     try {
@@ -34,6 +30,7 @@ use Try::Catch;
         finally {
             pass("finally called");
         };
+        pass("called after not handling error from catch block");
     }
     catch {
         fail("should not be called");
@@ -97,5 +94,5 @@ use Try::Catch;
     is_deeply \@expected, [1,2,3];
 }
 
-done_testing(10);
+done_testing(13);
 1;

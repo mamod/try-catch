@@ -25,23 +25,27 @@ try {
 
 try {
   die('Die');
-} finally {
-  pass('Moved into finally from catch');
 } catch {
   ok($_ =~ /Die/, 'Error text as expected');
+} finally {
+  pass('Moved into finally from catch');
 };
 
 try {
-  die('Die');
-} finally {
-  pass('Moved into finally block when try throws an exception and we have no catch block');
-};
+  try {
+    die('Die');
+  } finally {
+    pass('Moved into finally block when try throws an exception and we have no catch block');
+  };
+} catch {};
 
 try {
-  die('Die');
-} finally {
-  pass('First finally clause run');
-};
+  try {
+    die('Die');
+  } finally {
+    pass('First finally clause run');
+  };
+} catch {};
 
 try {
   # do not die
@@ -54,10 +58,12 @@ try {
 };
 
 try {
-  die("Die\n");
-} finally {
-  is_deeply(\@_, [ "Die\n" ], "finally got passed the exception");
-};
+  try {
+    die("Die\n");
+  } finally {
+    is_deeply(\@_, [ "Die\n" ], "finally got passed the exception");
+  };
+} catch {};
 
 try {
   try {
@@ -69,7 +75,7 @@ try {
   finally {
     pass("finally called");
   };
-};
+} catch {};
 
 $_ = "foo";
 try {

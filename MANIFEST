@@ -1,4 +1,6 @@
 .travis.yml
+bench/all.pl
+bench/trycatch.pl
 Changes
 lib/Try/Catch.pm
 Makefile.PL
@@ -8,6 +10,8 @@ t/basic.t
 t/context.t
 t/erroneous_usage.t
 t/finally.t
+t/fork.t
 t/given_when.t
 t/global_destruction_forked.t
+t/nested.t
 t/when.t

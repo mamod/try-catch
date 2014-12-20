@@ -42,7 +42,7 @@ my $prev;
 lives_ok {
   try {
     die "foo";
-  };
+  } catch {};
 } "basic try";
 
 
@@ -55,13 +55,13 @@ throws_ok {
 
 {
   local $@ = "magic";
-  is( try { 42 }, 42, "try block evaluated" );
+  is( (try { 42 } catch {}), 42, "try block evaluated" );
   is( $@, "magic", '$@ untouched' );
 }
 
 {
   local $@ = "magic";
-  is( try { die "foo" }, undef, "try block died" );
+  is( ( try { die "foo" } catch {} ), undef, "try block died" );
   is( $@, "magic", '$@ untouched' );
 }
 
@@ -71,8 +71,8 @@ throws_ok {
   is( $@, "magic", '$@ untouched' );
 }
 #
-is( scalar(try { "foo", "bar", "gorch" }), "gorch", "scalar context try" );
-is_deeply( [ try {qw(foo bar gorch)} ], [qw(foo bar gorch)], "list context try" );
+is( scalar(try { "foo", "bar", "gorch" } catch {} ), "gorch", "scalar context try" );
+is_deeply( [ try {qw(foo bar gorch)} catch {} ], [qw(foo bar gorch)], "list context try" );
 #
 is( scalar(try { die } catch { "foo", "bar", "gorch" }), "gorch", "scalar context catch" );
 is_deeply( [ try { die } catch {qw(foo bar gorch)} ], [qw(foo bar gorch)], "list context catch" );

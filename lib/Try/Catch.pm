@@ -6,17 +6,31 @@ use Data::Dumper;
 $Carp::Internal{+__PACKAGE__}++;
 use base 'Exporter';
 our @EXPORT = our @EXPORT_OK = qw(try catch finally);
-our $VERSION = 0.002;
+our $VERSION = 0.003;
+
+sub _default_cache {
+    croak $_[0];
+}
 
 sub try(&;@) {
     my $wantarray =  wantarray;
-    my $try = shift;
-    my $blocks = shift;
+    my $try       = shift;
+    my $caller    = pop;
+    my $finally   = pop;
+    my $catch     = pop;
 
-    my ($catch, $finally);
-    if ($blocks && ref $blocks eq 'HASH'){
-        $catch = $blocks->{_try_catch};
-        $finally = $blocks->{_try_finally};
+    if (!$caller || $caller ne __PACKAGE__){
+        croak "syntax error after try block \n" .
+                "usage : \n" .
+                "try { ... } catch { ... }; \n" .
+                "try { ... } finally { ... }; \n" .
+                "try { ... } catch { ... } finally { ... }; ";
+    }
+
+    #sane behaviour is to throw an error
+    #if there is no catch block
+    if (!$catch){
+        $catch = \&_default_cache;
     }
 
     my @ret;
@@ -36,7 +50,7 @@ sub try(&;@) {
     my $error = $@;
     my @args = $fail ? ($error) : ();
     
-    if ($fail && $catch) {
+    if ($fail) {
         my $ret = not eval {
             $@ = $prev_error;
             local $_ = $args[0];
@@ -66,30 +80,21 @@ sub try(&;@) {
 
 sub catch(&;@) {
     croak 'Useless bare catch()' unless wantarray;
-    my $ret = { _try_catch => shift };
-    if (@_) {
-        my $prev_block = shift;
-        if (ref $prev_block ne 'HASH' || !$prev_block->{_try_finally}){
-            croak 'Missing semicolon after catch block ';
-        }
-        croak 'One catch block allowed' if $prev_block->{_try_catch};
-        $ret->{_try_finally} = $prev_block->{_try_finally};
+    if (@_ > 1){
+        croak "syntax error after catch block - maybe a missing semicolon"
+            if !$_[2] || $_[2] ne __PACKAGE__;
+    } else {
+        return ( shift,  undef, __PACKAGE__);
     }
-    return $ret;
+    return (@_);
 }
 
 sub finally(&;@) {
     croak 'Useless bare finally()' unless wantarray;
-    my $ret = { _try_finally => shift };
-    if (@_) {
-        my $prev_block = shift;
-        if (ref $prev_block ne 'HASH' || !$prev_block->{_try_catch}){
-            croak 'Missing semicolon after finally block ';
-        }
-        croak 'One finally block allowed' if $prev_block->{_try_finally};
-        $ret->{_try_catch} = $prev_block->{_try_catch};
+    if (@_ > 1) {
+        croak "syntax error after finally block - maybe a missing semicolon";
     }
-    return $ret;
+    return ( shift, __PACKAGE__ );
 }
 
 1;
