@@ -1,15 +1,18 @@
 Revision history for Perl extension Try::Catch.
 
-0.001  Thu Dec 18 23:25:21 2014
-	- original version; created by h2xs 1.23 with options
-		-X -n URI::Simple
+0.0.4  2015 2015-07-03
+	- documentation
+	- prepare to release on cpan
 
-0.002  Fri Dec 19 23:25:21 2014
-	- Remove Global variables
-	- Adding nested tests
-
-0.003  Sat Dec 20 23:25:21 2014
+0.0.3  2014 2014-12-28
 	- block must be ordered
 	- try block will die by default if there is no catch block
 	- more benchmarks
 
+0.0.2  2014 2014-12-20
+	- Remove Global variables
+	- Adding nested tests
+
+0.0.1  2014 2014-12-18
+	- initial version
+	- no cpan release yet
