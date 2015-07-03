@@ -1,5 +1,9 @@
 Revision history for Perl extension Try::Catch.
 
+0.0.5  2015 2015-07-03
+	- typo in module discription
+	- bump version!!!
+
 0.0.4  2015 2015-07-03
 	- documentation
 	- prepare to release on cpan

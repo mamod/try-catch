@@ -6,7 +6,7 @@ use Data::Dumper;
 $Carp::Internal{+__PACKAGE__}++;
 use base 'Exporter';
 our @EXPORT = our @EXPORT_OK = qw(try catch finally);
-our $VERSION = '0.0.4';
+our $VERSION = '0.0.5';
 
 sub _default_cache {
     croak $_[0];
@@ -102,7 +102,7 @@ sub finally(&;@) {
 __END__
 =head1 NAME
 
-Try::Catch - node.js path module in perl
+Try::Catch - Try Catch exception handler based on Try::Tiny But faster 
 
 =for html
 <a href="https://travis-ci.org/mamod/try-catch"><img src="https://travis-ci.org/mamod/try-catch.svg?branch=master"></a>

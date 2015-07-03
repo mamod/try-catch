@@ -1,6 +1,6 @@
 =head1 NAME
 
-Try::Catch - node.js path module in perl
+Try::Catch - Try Catch exception handler based on Try::Tiny But faster 
 
 =for html
 <a href="https://travis-ci.org/mamod/try-catch"><img src="https://travis-ci.org/mamod/try-catch.svg?branch=master"></a>
