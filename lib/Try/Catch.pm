@@ -6,7 +6,7 @@ use Data::Dumper;
 $Carp::Internal{+__PACKAGE__}++;
 use base 'Exporter';
 our @EXPORT = our @EXPORT_OK = qw(try catch finally);
-our $VERSION = '0.0.5';
+our $VERSION = '1.0.0';
 
 sub _default_cache {
     croak $_[0];
@@ -46,10 +46,10 @@ sub try(&;@) {
         }
         return 1;
     };
-    
+
     my $error = $@;
     my @args = $fail ? ($error) : ();
-    
+
     if ($fail) {
         my $ret = not eval {
             $@ = $prev_error;
@@ -102,7 +102,7 @@ sub finally(&;@) {
 __END__
 =head1 NAME
 
-Try::Catch - Try Catch exception handler based on Try::Tiny But faster 
+Try::Catch - Try Catch exception handler based on Try::Tiny But faster
 
 =for html
 <a href="https://travis-ci.org/mamod/try-catch"><img src="https://travis-ci.org/mamod/try-catch.svg?branch=master"></a>
@@ -110,11 +110,11 @@ Try::Catch - Try Catch exception handler based on Try::Tiny But faster
 =head1 SYNOPSIS
 
     use Try::Catch;
-    
+
     try {
         die "something went wrong";
     } catch {
-        
+
     } finally {
 
         ##some cleanup code
@@ -123,7 +123,7 @@ Try::Catch - Try Catch exception handler based on Try::Tiny But faster
 
 =head1 DESCRIPTION
 
-A small, fast, try catch blocks for perl, it's inspired and mostly copied from L<Try::Tiny> but with some 
+A small, fast, try catch blocks for perl, it's inspired and mostly copied from L<Try::Tiny> but with some
 modifications to boost execution speed, see L</Benchmarks>.
 
 I published a new module instead of contributing to Try::Tiny directly because I had to break some
@@ -141,7 +141,7 @@ this behaves exactly as how other implementations of try catch blocks
 
 =item if there is no catch block error will throw
 
-in case of try followed by finally block and no catch block, finally block will be fired 
+in case of try followed by finally block and no catch block, finally block will be fired
 then an exception will be thrown, this is also the default behaviour of try catch in other
 languages.
 
@@ -157,7 +157,7 @@ This is not totally fair but please consider Try::Catch a stripped Try::Tiny ver
 with no blessing and no usage of Sub::Name, so it must be faster, right! :)
 
 This is a simple test with just a try catch blocks with no exception
-    
+
     |  Module:      | Rate          | %         |
     |-------------------------------------------|
     |  Try::Tiny    | 98425/s       | -68%      |
@@ -165,7 +165,7 @@ This is a simple test with just a try catch blocks with no exception
 
 
 Test with Try Catch, Finally Blocks, No Exception
-    
+
     |  Module:      | Rate          | %         |
     |-------------------------------------------|
     |  Try::Tiny    | 60423/s       | -75%      |
@@ -208,5 +208,5 @@ Mamod A. Mehyar, E<lt>mamod.mehyar@gmail.comE<gt>
 
 =head1 LICENSE
 
-This library is free software; you can redistribute it and/or modify 
+This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself
