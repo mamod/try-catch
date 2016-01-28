@@ -1,5 +1,10 @@
 Revision history for Perl extension Try::Catch.
 
+1.0.0  2016 2016-01-28
+	- add missing license info (Russell Jenkins)
+	- add link to the source repository (Russell Jenkins)
+	- bump version to stable release
+
 0.0.5  2015 2015-07-03
 	- typo in module discription
 	- bump version!!!
