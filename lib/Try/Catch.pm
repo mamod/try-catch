@@ -48,19 +48,17 @@ sub try(&;@) {
     };
 
     my $error = $@;
-    my @args = $fail ? ($error) : ();
 
     if ($fail) {
         my $ret = not eval {
             $@ = $prev_error;
-            local $_ = $args[0];
-            for ($_){
+            for ($error) {
                 if (!defined $wantarray) {
-                    $catch->(@args);
+                    $catch->($error);
                 } elsif (!$wantarray) {
-                    $ret[0] = $catch->(@args);
+                    $ret[0] = $catch->($error);
                 } else {
-                    @ret = $catch->(@args);
+                    @ret = $catch->($error);
                 }
                 last; ## seems to boost speed by 7%
             }
@@ -68,13 +66,13 @@ sub try(&;@) {
         };
 
         if ($ret){
-            $finally->(@args) if $finally;
+            $finally->($error) if $finally;
             croak $@;
         }
     }
 
     $@ = $prev_error;
-    $finally->(@args) if $finally;
+    $finally->( $fail ? $error : () ) if $finally;
     return $wantarray ? @ret : $ret[0];
 }
 
