@@ -9,7 +9,9 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME              => 'Try::Catch',
     VERSION_FROM      => 'lib/Try/Catch.pm', # finds $VERSION
-    PREREQ_PM         => {}, # none
+    PREREQ_PM         => {
+        perl => '5.8.0', # Haven't tested earlier versions
+    },
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/Try/Catch.pm', # retrieve abstract from module
        AUTHOR         => 'Mamod A. Mehyar <mamod.mehyar@gmail.com>') : ()),

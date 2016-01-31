@@ -2,7 +2,6 @@
 
 use strict;
 use warnings;
-use feature "switch";
 use Test::More;
 
 BEGIN {
