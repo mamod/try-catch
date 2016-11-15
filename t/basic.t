@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More qw(no_plan);
 
 use Try::Catch;
 
@@ -157,5 +157,3 @@ sub Evil::new { bless { }, $_[0] }
   is_deeply( $caught, { prev => "bar\n" }, 'previous value of $@ available for capture' );
   is( $prev, "bar\n", 'previous value of $@ also available in catch block' );
 }
-
-done_testing();

@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More qw(no_plan);
 
 use Try::Catch;
 
@@ -61,5 +61,3 @@ sub run {
     return 'finally';
   };
 }
-
-done_testing();
