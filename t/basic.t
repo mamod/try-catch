@@ -122,8 +122,11 @@ sub Evil::new { bless { }, $_[0] }
     die "foo";
   } catch {
     pass("catch invoked");
-    local $TODO = "i don't think we can ever make this work sanely, maybe with SIG{__DIE__}" if $] < 5.014;
-    like($_, qr/foo/);
+    SKIP: {
+      # i don't think we can ever make this work sanely, maybe with SIG{__DIE__}
+      skip "Perl 5.14 required", 1 if $] < 5.014;
+      like($_, qr/foo/);
+    }
   };
 
   is( $@, "magic", '$@ untouched' );
