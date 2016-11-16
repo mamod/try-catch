@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More;
+use Test::More qw(no_plan);
 use Try::Catch;
 
 {
@@ -93,6 +93,3 @@ use Try::Catch;
     };
     is_deeply \@expected, [1,2,3];
 }
-
-done_testing(13);
-1;
