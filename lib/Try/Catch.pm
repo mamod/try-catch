@@ -8,7 +8,7 @@ use base 'Exporter';
 our @EXPORT = our @EXPORT_OK = qw(try catch finally);
 our $VERSION = '1.0.0';
 
-sub _default_cache {
+sub _default_catch {
     croak $_[0];
 }
 
@@ -30,7 +30,7 @@ sub try(&;@) {
     #sane behaviour is to throw an error
     #if there is no catch block
     if (!$catch){
-        $catch = \&_default_cache;
+        $catch = \&_default_catch;
     }
 
     my @ret;
