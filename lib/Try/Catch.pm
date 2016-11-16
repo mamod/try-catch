@@ -65,13 +65,21 @@ sub try(&;@) {
         };
 
         if ($ret){
-            $finally->($error) if $finally;
-            croak $@;
+            my $catch_error = $@;
+            if ($finally) {
+                $@ = $prev_error;
+                $finally->($error);
+            }
+            croak $catch_error;
         }
     }
 
+    if ($finally) {
+        $@ = $prev_error;
+        $finally->( $fail ? $error : () );
+    }
+
     $@ = $prev_error;
-    $finally->( $fail ? $error : () ) if $finally;
     return $wantarray ? @ret : $ret[0];
 }
 
