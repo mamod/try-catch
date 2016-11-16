@@ -2,7 +2,6 @@ package Try::Catch;
 use strict;
 use warnings;
 use Carp;
-use Data::Dumper;
 $Carp::Internal{+__PACKAGE__}++;
 use base 'Exporter';
 our @EXPORT = our @EXPORT_OK = qw(try catch finally);
