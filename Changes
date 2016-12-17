@@ -1,5 +1,11 @@
 Revision history for Perl extension Try::Catch.
 
+1.1.0  2016 2016-12-17
+	- (Bug fix) Prevent finally block to modify previous error and error from catch (Pali)
+	- Fix tests to work with Perl 5.6.0 (Pali)
+	- documenting an unsolved bug behavior with finally blocks
+	- Some other minor fixes - remove Data::Dumper and typos (Pali)
+
 1.0.0  2016 2016-01-28
 	- add missing license info (Russell Jenkins)
 	- add link to the source repository (Russell Jenkins)
