@@ -5,7 +5,7 @@ use Carp;
 $Carp::Internal{+__PACKAGE__}++;
 use base 'Exporter';
 our @EXPORT = our @EXPORT_OK = qw(try catch finally);
-our $VERSION = '1.0.0';
+our $VERSION = '1.1.0';
 
 sub _default_catch {
     croak $_[0];
@@ -206,6 +206,28 @@ Benchmarks included in this dist inside bench folder
 =item L<TryCatch>
 
 =back
+
+=head1 Known Bugs
+
+When doing block jump from try { } or catch { } then finally will not be called.
+
+For example
+
+    use Try::Catch;
+    for (1) {
+        try {
+            die;
+        } catch {
+            goto skip;
+        } finally {
+            #finally will not be called
+            print "finally was called\n";
+        }
+    }
+    skip:
+
+finally will work in most cases unless there is a block jump (last, goto, exit, ..)
+so I recommend avoid using finally at all as it's planned to be removed in v2.0.0
 
 =head1 AUTHOR
 
