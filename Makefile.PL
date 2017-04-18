@@ -26,6 +26,7 @@ WriteMakefile(
                  url  => 'https://github.com/mamod/try-catch.git',
                  web  => 'https://github.com/mamod/try-catch',
              },
+             bugtracker => { web => 'https://github.com/mamod/try-catch/issues' },
          }})
          : ()
     ),       
